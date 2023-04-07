@@ -1,7 +1,8 @@
-# tele_uploader
-Telegram bot uploading media files with caption automatically from the desired folder.
+## tele_uploader
+Telegram bot script uploading media files with caption automatically from the desired folder.
+You need some prerequisite like MySQL and ffmpeg to make it work.
 
-# how to install
+## how to install
 1. download script
 ```shell
 wget https://raw.githubusercontent.com/joongon/tele_uploader/main/tele_uploader.py
@@ -10,7 +11,7 @@ wget https://raw.githubusercontent.com/joongon/tele_uploader/main/tele_uploader.
 3. run the script
 * PREREQUISTE : MySQL DB configuration, ffmpeg tool
 
-## MySQL 설정
+### MySQL 설정
 1. DB 생성
 ```sql
 CREATE DATABASE 데이터베이스이름;
