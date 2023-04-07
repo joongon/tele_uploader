@@ -1,7 +1,7 @@
 ### tele_uploader
-Telegram bot uploading media files with caption automatically in the desired folder.
+Telegram bot uploading media files with caption automatically from the desired folder.
 
-## how to install
+### how to install
 1. download script
 ```shell
 wget https://raw.githubusercontent.com/joongon/tele_uploader/main/tele_uploader.py
