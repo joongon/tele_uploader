@@ -3,7 +3,8 @@ Telegram bot uploading media files with caption automatically in the desired fol
 
 ## how to install
 1. download script
-```wget https://raw.githubusercontent.com/joongon/tele_uploader/main/tele_uploader.py
+```
+wget https://raw.githubusercontent.com/joongon/tele_uploader/main/tele_uploader.py
 ```
 2. key in required information like telegram token, chat_id, target folder, etc.
 3. run the script
