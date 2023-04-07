@@ -1,6 +1,6 @@
 ## tele_uploader
 Telegram bot script uploading media files with caption automatically from the desired folder.
-You need some prerequisite like MySQL and ffmpeg to make it work.
+- You need some prerequisite like MySQL and ffmpeg to make it work.
 
 ## how to install
 1. download script
