@@ -7,19 +7,46 @@ import subprocess
 import datetime
 import time
 from pathlib import Path
+import sys
 
 try:
     os.system('clear')
 except:
     os.system('cls')
 
+print("\n\n\
+#####################################################################\n\
+#                                                                   #\n\
+#                        TELE Uploader v1.0                         #\n\
+#                                                                   #\n\
+#              developed by RIGIDBODY since 2023.04                 #\n\
+#        joongonrigid@gmail.com | https://velog.io/@joongon         #\n\
+#                                                                   #\n\
+#                                                                   #\n\
+#####################################################################\n\n\n")
+
+text = "\
+Tele_Uploader is getting strated now ...  \n\n\
+    1. Scan targted folders\n\
+    2. DB Redundancy Checking\n\
+    3. Input the path of all files in the target folders\n\
+    4. Read a record where mark field is ZERO(0)\n\
+    5. All files read from the DB is uploaded to the Telegram Channel/Group/Private Session using Telegram API one by one\n\n"
+
+text_array = list(text)
+for letter in text_array:
+    sys.stdout.write(letter)
+    sys.stdout.flush()
+    time.sleep(0.03)                                                          
+
 #Warning : 동영상 변환을 위해 ffmpeg가 설치되어 있어야 한다.
 #initial condition ######################
 target1 = '절대경로명' #폴더만 태크생성
 target2 = '절대경로명' # 폴더 + 파일명 태그형성
 ###### TUB(Telegram Uploading Bot) 정보 #########################
-TOKEN = '업로드 텔레그램 봇 토큰' #devexclusive_bot
-chat_id = '업로드 대화방 ID' #DevforXELP
+TOKEN = '업로드 텔레그램 봇 토큰'
+chat_id = '업로드 대화방 ID'
+server_name = 'DEFAULT SERVER' #Uploader Bot이 가동되는 서버 이름
 
 ##### TUB(Telegram Uploading Bot) 실행 이슈/정보 Noti 전용 텔레그램 bot 정보
 ##### Optional, Skip 가능
@@ -176,10 +203,8 @@ class DB_Handler:
         self.args = args
 
     def db_prep(self, option): # item = ['path', size, 'time_mode(unix_time)']
-        print(self.args, "-----------> self.args") #삭제
         tagger = Tagger(self.args[0][0]) #args[0][0] = full_path
         main_info = tagger.path_parser()
-        print(main_info, "-------> main_info") # to be deleted
         info_size = self.args[0][1]
         info_time = ts_converter(self.args[0][2])
         if option == 2:
@@ -200,14 +225,18 @@ class DB_Handler:
             print(result, '-----------------> DB Insert Result')
             db.commit()
         except Exception as e:
+            text = f"({server_name})DB에 파일경로 입력 중 문제가 생겼습니다."
+            print(text)
             er_message = f"Error Message for DB register: {e}\n\
-                (XELP soft_flavour1 bot)DB 등록 중 문제가 생겼습니다."
+            ({server_name})DB에 파일경로 입력 중 문제가 발생하였습니다."
             print(er_message)
+            params = {'chat_id': chat_id_message, 'text': er_message}
             
             try:
                 params = {'chat_id': chat_id_message, 'text': er_message}
                 requests.get(url_message, params=params)
-            except:
+            except Exception as e:
+                print(e)
                 pass
         db.close()
 
@@ -294,10 +323,12 @@ class Uploader:
                 list_result.append(result)
        
         except Exception as e:
-            print(e)
-            text = "()Telegram 업로드 중에 문제가 생겼습니다. DB에 등록된 파일과 실제 파일경로가 다르거나 없습니다."
+            text = f"({server_name})Telegram 업로드 중에 문제가 생겼습니다. DB 관련 문제이거나 다른 문제 일 수 있습니다."
             print(text)
-            params = {'chat_id': chat_id_message, 'text': text}
+            er_message = f"Error Message for DB register: {e}\n\
+                ({server_name})DB 정보로부터 타겟 파일 업로드시 문제가 발생하였습니다."
+            print(er_message)
+            params = {'chat_id': chat_id_message, 'text': er_message}
             requests.get(url_message, params=params)
         return list_result
 
@@ -329,18 +360,22 @@ if __name__ == '__main__':
     try:
         ex1 = Main(target1)
     except Exception as e:
+        print(e)
         pass
     try:
         ex2 = Main(target2, 2)
     except Exception as e:
+        print(e)
         pass
     try:
         ex1.runner()
     except Exception as e:
+        print(e)
         pass
     try:
         ex2.runner()
     except Exception as e:
+        print(e)
         pass
 
 
