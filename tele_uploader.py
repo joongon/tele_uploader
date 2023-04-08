@@ -29,7 +29,7 @@ text = "\
 Tele_Uploader is getting strated now ...  \n\n\
     1. Scan targted folders\n\
     2. DB Redundancy Checking\n\
-    3. Input the path of all files in the target folders\n\
+    3. Input the path of all files in the target folders into the DB\n\
     4. Read a record where mark field is ZERO(0)\n\
     5. All files read from the DB is uploaded to the Telegram Channel/Group/Private Session using Telegram API one by one\n\n"
 
