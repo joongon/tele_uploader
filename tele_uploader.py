@@ -319,6 +319,7 @@ class Uploader:
                     data = {'chat_id': chat_id, 'caption': tag}
                     files = {'document': open(path, 'rb')}
                     result = requests.post(url_document, files=files, data=data)
+                    marker.db_marker(path)
                     time.sleep(dlay)
                 list_result.append(result)
        
