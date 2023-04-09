@@ -280,47 +280,65 @@ class Uploader:
                 extension = item[2]
                 print(extension, "-------------> extension")
                 if extension in video_group:
-                    data = {'chat_id': chat_id, 'caption': tag, 'supports_streaming': True}
-                    files = {'video': open(path, 'rb')}
-                    result = requests.post(url_video, files=files, data=data)
-                    time.sleep(dlay)
-                    marker.db_marker(path)
+                    try:
+                        data = {'chat_id': chat_id, 'caption': tag, 'supports_streaming': True}
+                        files = {'video': open(path, 'rb')}
+                        result = requests.post(url_video, files=files, data=data)
+                        time.sleep(dlay)
+                        marker.db_marker(path)
+                    except Exception as e:
+                        print(e)
                 elif extension in photo_group:
-                    data = {'chat_id': chat_id, 'caption': tag}
-                    files = {'photo': open(path, 'rb')}
-                    result = requests.post(url_photo, files=files, data=data)
-                    time.sleep(dlay)
-                    marker.db_marker(path)
+                    try:
+                        data = {'chat_id': chat_id, 'caption': tag}
+                        files = {'photo': open(path, 'rb')}
+                        result = requests.post(url_photo, files=files, data=data)
+                        time.sleep(dlay)
+                        marker.db_marker(path)
+                    except Exception as e:
+                        print(e)
                 elif extension in animation_group:
-                    data = {'chat_id': chat_id, 'caption': tag}
-                    files = {'animation': open(path, 'rb')}
-                    result = requests.post(url_animation, files=files, data=data)
-                    time.sleep(dlay)
-                    marker.db_marker(path)
+                    try:
+                        data = {'chat_id': chat_id, 'caption': tag}
+                        files = {'animation': open(path, 'rb')}
+                        result = requests.post(url_animation, files=files, data=data)
+                        time.sleep(dlay)
+                        marker.db_marker(path)
+                    except Exception as e:
+                        print(e)
 
                 elif extension in singularity_group:
-                    path = path_curer(path)
-                    # shell1 = f"ffmpeg -i {path} -pix_fmt rgb24 output.gif"
-                    shell1 = f"ffmpeg -y -i {path} output.mp4"
-                    shell2 = f"rm -f output.mp4"
-                    subprocess.call(shell1, shell=True)
-                    data = {'chat_id': chat_id, 'caption': tag, 'supports_streaming': True}
-                    files = {'video': open('output.mp4', 'rb')}
-                    result = requests.post(url_video, files=files, data=data)
-                    subprocess.call(shell2, shell=True)
-                    time.sleep(dlay)
-                    marker.db_marker(path)
+                    try:
+                        path = path_curer(path)
+                        # shell1 = f"ffmpeg -i {path} -pix_fmt rgb24 output.gif"
+                        shell1 = f"ffmpeg -y -i {path} output.mp4"
+                        shell2 = f"rm -f output.mp4"
+                        subprocess.call(shell1, shell=True)
+                        data = {'chat_id': chat_id, 'caption': tag, 'supports_streaming': True}
+                        files = {'video': open('output.mp4', 'rb')}
+                        result = requests.post(url_video, files=files, data=data)
+                        subprocess.call(shell2, shell=True)
+                        time.sleep(dlay)
+                        marker.db_marker(path)
+                    except Exception as e:
+                        print(e)
 
                 elif extension == 'db' or extension == 'html':
-                    result = ""
-                    print(marker.db_marker(path), '-------------> db_marker_result')
-                    print(path, '---------------> path for db_marker')
+                    try: 
+                        result = ""
+                        print(marker.db_marker(path), '-------------> db_marker_result')
+                        print(path, '---------------> path for db_marker')
+                    except Exception as e:
+                        print(e)
                 else:
-                    data = {'chat_id': chat_id, 'caption': tag}
-                    files = {'document': open(path, 'rb')}
-                    result = requests.post(url_document, files=files, data=data)
-                    marker.db_marker(path)
-                    time.sleep(dlay)
+                    try:
+                        data = {'chat_id': chat_id, 'caption': tag}
+                        files = {'document': open(path, 'rb')}
+                        result = requests.post(url_document, files=files, data=data)
+                        marker.db_marker(path)
+                        time.sleep(dlay)
+                    except Exception as e:
+                        print(e)
                 list_result.append(result)
        
         except Exception as e:
@@ -357,7 +375,7 @@ class Main:
         Uploader(DB_Handler().db_reader()).tele_uploader()
         return print('All processed')
         
-if __name__ == '__main__':
+if __name__ == '__main__': #폴더만 태그생성하는 프로세스틑 ex1, 파일까지 태그생성하는 프로세스틑 ex2, 둘중 하나를 주석처리하는 것이 좋음
     try:
         ex1 = Main(target1)
     except Exception as e:
