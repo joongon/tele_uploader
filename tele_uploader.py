@@ -82,7 +82,7 @@ def name_cleaner(trash):
     return removed
 
 def tele_Message(chat_id, url_message):
-    params = {'chat_id': chat_id, 'text':'Pure BOT 테스트입니다.'}
+    params = {'chat_id': chat_id, 'text':'TELE UPLOADER'}
     result = requests.get(url_message, params=params)
     return result
 
@@ -342,6 +342,7 @@ class Uploader:
                 list_result.append(result)
        
         except Exception as e:
+            marker.db_marker(path) #Error난 파일은 Marking하고 Skip
             text = f"({server_name})Telegram 업로드 중에 문제가 생겼습니다. DB 관련 문제이거나 다른 문제 일 수 있습니다."
             print(text)
             er_message = f"Error Message for DB register: {e}\n\
@@ -349,6 +350,7 @@ class Uploader:
             print(er_message)
             params = {'chat_id': chat_id_message, 'text': er_message}
             requests.get(url_message, params=params)
+            Uploader(DB_Handler().db_reader()).tele_uploader() #Error 발샐시 Skip하고 계속 진행
         return list_result
 
 class Main:
