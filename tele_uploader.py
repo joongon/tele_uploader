@@ -82,7 +82,7 @@ def name_cleaner(trash):
     return removed
 
 def tele_Message(chat_id, url_message):
-    params = {'chat_id': chat_id, 'text':'TELE UPLOADER'}
+    params = {'chat_id': chat_id, 'text':'HOT BOT 작동 중입니다.'}
     result = requests.get(url_message, params=params)
     return result
 
@@ -249,7 +249,7 @@ class DB_Handler:
         print(tobe_uploaded, '---------------> to be uploaded')
         db.close()
         return tobe_uploaded
-
+        
 class Uploader:    
     def __init__(self, second_order_tuple):
         self.second_order_tuple = second_order_tuple
@@ -263,6 +263,7 @@ class Uploader:
         singularity_group = ['webm', 'ts', 'TS', 'mkv', 'MKV']
         marker = DB_Marker()
 
+        
         try: 
             for item in tuple_info:
                 print(item, '------------------> item')
@@ -296,7 +297,8 @@ class Uploader:
                         time.sleep(dlay)
                         marker.db_marker(path)
                     except Exception as e:
-                        print(e)
+                        print(e, "---------------> Photogroup error")
+                        marker.db_marker(path)
                 elif extension in animation_group:
                     try:
                         data = {'chat_id': chat_id, 'caption': tag}
@@ -306,10 +308,13 @@ class Uploader:
                         marker.db_marker(path)
                     except Exception as e:
                         print(e)
-
+                        marker.db_marker(path)
+                        
                 elif extension in singularity_group:
                     try:
-                        path = path_curer(path)
+                        # print(path, "---------> intact path ")
+                        # path = path_curer(path)
+                        # print(path, "---------> cured path ")
                         # shell1 = f"ffmpeg -i {path} -pix_fmt rgb24 output.gif"
                         shell1 = f"ffmpeg -y -i {path} output.mp4"
                         shell2 = f"rm -f output.mp4"
@@ -322,7 +327,7 @@ class Uploader:
                         marker.db_marker(path)
                     except Exception as e:
                         print(e)
-
+                        marker.db_marker(path)
                 elif extension == 'db' or extension == 'html':
                     try: 
                         result = ""
@@ -330,6 +335,7 @@ class Uploader:
                         print(path, '---------------> path for db_marker')
                     except Exception as e:
                         print(e)
+                        marker.db_marker(path)
                 else:
                     try:
                         data = {'chat_id': chat_id, 'caption': tag}
@@ -339,18 +345,17 @@ class Uploader:
                         time.sleep(dlay)
                     except Exception as e:
                         print(e)
+                        pass
                 list_result.append(result)
-       
+    
         except Exception as e:
-            marker.db_marker(path) #Error난 파일은 Marking하고 Skip
-            text = f"({server_name})Telegram 업로드 중에 문제가 생겼습니다. DB 관련 문제이거나 다른 문제 일 수 있습니다."
-            print(text)
-            er_message = f"Error Message for DB register: {e}\n\
+            print(e)
+            marker.db_marker(path)
+            er_message = f"{e}\n\
                 ({server_name})DB 정보로부터 타겟 파일 업로드시 문제가 발생하였습니다."
-            print(er_message)
             params = {'chat_id': chat_id_message, 'text': er_message}
             requests.get(url_message, params=params)
-            Uploader(DB_Handler().db_reader()).tele_uploader() #Error 발샐시 Skip하고 계속 진행
+            
         return list_result
 
 class Main:
