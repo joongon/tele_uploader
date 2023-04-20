@@ -42,6 +42,8 @@ for letter in text_array:
 #Warning : 동영상 변환을 위해 ffmpeg가 설치되어 있어야 한다.
 #initial condition ######################
 target1 = '절대경로명' #폴더만 태크생성
+stlevel = 4 #폴더 태그 시작 지점, /mnt/teleup_jjin/folder가 타겟일 경우 그 이하부터 태그라면
+#(0) > (1)mnt > (2)tele_up_jjin > (3)file > (4){태그시작폴더}
 target2 = '절대경로명' # 폴더 + 파일명 태그형성
 ###### TUB(Telegram Uploading Bot) 정보 #########################
 TOKEN = '업로드 텔레그램 봇 토큰'
@@ -153,22 +155,24 @@ class Tagger:
 
     def tag_maker(self, list_path_info, option=1): #list_path_into = [full_path, folder_path, file, extension]
         if option == 1:
-            list_info = name_cleaner(list_path_info[1])
-            print(list_info, '---------------> list_info')
-            list_folder_info = list_info.split('/')
-            
+            list_info = name_cleaner(list_path_info[2])
+            list_file_info = list_info.split('.')
+            file_name_only = ""
             tag_info = ""
-            for i in range(6, len(list_folder_info)):
-                tag_info_2nd = list_folder_info[i].split()
-                for item in tag_info_2nd:
+            for i in range(len(list_file_info) - 1):
+                file_name_only += list_file_info[i]
+                cured_file_name = name_cleaner(file_name_only)
+                list_cured_name = cured_file_name.split()
+                for item in list_cured_name:
                     tag_info += " #" + item
+            
         elif option == 2:
             list_info1 = name_cleaner(list_path_info[1])
             list_info2 = name_cleaner(list_path_info[2])
 
             list_folder_info1 = list_info1.split('/')
             tag_info1 = ""
-            for i in range(6, len(list_folder_info1)):
+            for i in range(stlevel, len(list_folder_info1)):
                 tag_info_2nd1 = list_folder_info1[i].split()
                 for item in tag_info_2nd1:
                     tag_info1 += " #" + item
