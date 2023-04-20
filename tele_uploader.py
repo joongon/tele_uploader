@@ -131,7 +131,7 @@ class DB_Comparison:
         cur = db.cursor()
         # query = f'SELECT full_path FROM {table} WHERE full_path = %s AND mark = %s'
         query = f'SELECT full_path FROM {table} WHERE full_path = %s'
-        result = cur.execute(query, (full_path[0]))
+        result = cur.execute(query, (full_path))
         db.close()
         return result
 
@@ -263,7 +263,6 @@ class Uploader:
         singularity_group = ['webm', 'ts', 'TS', 'mkv', 'MKV']
         marker = DB_Marker()
 
-        
         try: 
             for item in tuple_info:
                 print(item, '------------------> item')
@@ -289,6 +288,7 @@ class Uploader:
                         marker.db_marker(path)
                     except Exception as e:
                         print(e)
+                        marker.db_marker(path)
                 elif extension in photo_group:
                     try:
                         data = {'chat_id': chat_id, 'caption': tag}
@@ -312,10 +312,6 @@ class Uploader:
                         
                 elif extension in singularity_group:
                     try:
-                        # print(path, "---------> intact path ")
-                        # path = path_curer(path)
-                        # print(path, "---------> cured path ")
-                        # shell1 = f"ffmpeg -i {path} -pix_fmt rgb24 output.gif"
                         shell1 = f"ffmpeg -y -i {path} output.mp4"
                         shell2 = f"rm -f output.mp4"
                         subprocess.call(shell1, shell=True)
@@ -331,8 +327,8 @@ class Uploader:
                 elif extension == 'db' or extension == 'html':
                     try: 
                         result = ""
-                        print(marker.db_marker(path), '-------------> db_marker_result')
-                        print(path, '---------------> path for db_marker')
+                        marker.db_marker(path)
+          
                     except Exception as e:
                         print(e)
                         marker.db_marker(path)
@@ -345,7 +341,7 @@ class Uploader:
                         time.sleep(dlay)
                     except Exception as e:
                         print(e)
-                        pass
+                        marker.db_marker(path)
                 list_result.append(result)
     
         except Exception as e:
@@ -382,27 +378,27 @@ class Main:
         Uploader(DB_Handler().db_reader()).tele_uploader()
         return print('All processed')
         
-if __name__ == '__main__': #폴더만 태그생성하는 프로세스틑 ex1, 파일까지 태그생성하는 프로세스틑 ex2, 둘중 하나를 주석처리하는 것이 좋음
+if __name__ == '__main__':
     try:
         ex1 = Main(target1)
     except Exception as e:
         print(e)
-        pass
+       
     try:
         ex2 = Main(target2, 2)
     except Exception as e:
         print(e)
-        pass
+        
     try:
         ex1.runner()
     except Exception as e:
         print(e)
-        pass
+       
     try:
         ex2.runner()
     except Exception as e:
         print(e)
-        pass
+       
 
 
     
